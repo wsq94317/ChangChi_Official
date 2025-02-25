@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ChangChiApi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class NewInitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,11 +19,11 @@ namespace ChangChiApi.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name_EN = table.Column<string>(type: "text", nullable: false),
-                    Name_ZH_CN = table.Column<string>(type: "text", nullable: false),
-                    Name_ZH_TW = table.Column<string>(type: "text", nullable: false),
-                    Name_VN = table.Column<string>(type: "text", nullable: false),
-                    Name_KO = table.Column<string>(type: "text", nullable: false),
-                    Name_JA = table.Column<string>(type: "text", nullable: false)
+                    Name_ZH_CN = table.Column<string>(type: "text", nullable: true),
+                    Name_ZH_TW = table.Column<string>(type: "text", nullable: true),
+                    Name_VN = table.Column<string>(type: "text", nullable: true),
+                    Name_KO = table.Column<string>(type: "text", nullable: true),
+                    Name_JA = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -38,13 +38,13 @@ namespace ChangChiApi.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CategoryId = table.Column<int>(type: "integer", nullable: false),
                     Name_EN = table.Column<string>(type: "text", nullable: false),
-                    Name_ZH_CN = table.Column<string>(type: "text", nullable: false),
-                    Name_ZH_TW = table.Column<string>(type: "text", nullable: false),
-                    Name_VN = table.Column<string>(type: "text", nullable: false),
-                    Name_KO = table.Column<string>(type: "text", nullable: false),
-                    Name_JA = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Name_ZH_CN = table.Column<string>(type: "text", nullable: true),
+                    Name_ZH_TW = table.Column<string>(type: "text", nullable: true),
+                    Name_VN = table.Column<string>(type: "text", nullable: true),
+                    Name_KO = table.Column<string>(type: "text", nullable: true),
+                    Name_JA = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
                 },
                 constraints: table =>
                 {
@@ -65,7 +65,7 @@ namespace ChangChiApi.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ProductId = table.Column<int>(type: "integer", nullable: false),
                     ImageUrl = table.Column<string>(type: "text", nullable: false),
-                    IsPrimary = table.Column<bool>(type: "boolean", nullable: false)
+                    IsPrimary = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
