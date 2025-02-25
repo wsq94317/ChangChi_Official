@@ -1,0 +1,6 @@
+@ChangChiApi_HostAddress = http://localhost:5192
+
+GET {{ChangChiApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
