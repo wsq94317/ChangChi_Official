@@ -4,8 +4,8 @@ namespace ChangChiApi.Models
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public string ImageUrl { get; set; } = string.Empty; // NOT NULL
-        public bool IsPrimary { get; set; } = false; // 默认 FALSE
-        public Product Product { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
+        public bool IsPrimary { get; set; } = false;
+        public Product? Product { get; set; } 
     }
 }
