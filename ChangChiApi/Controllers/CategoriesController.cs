@@ -17,9 +17,20 @@ namespace ChangChiApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<object>>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Name_EN,
+                    c.Name_ZH_CN,
+                    c.Name_ZH_TW,
+                    c.Name_VN,
+                    c.Name_KO,
+                    c.Name_JA
+                })
+                .ToListAsync();
         }
     }
 }

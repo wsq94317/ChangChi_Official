@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 
 function Banner() {
   const banners = [
-    'https://via.placeholder.com/1920x600?text=Changchi+Banner+1',
-    'https://via.placeholder.com/1920x600?text=Changchi+Banner+2',
-    'https://via.placeholder.com/1920x600?text=Changchi+Banner+3',
+    '/logo.png', // 临时使用本地 Logo
+    '/logo.png',
+    '/logo.png',
   ];
   const [current, setCurrent] = useState(0);
 

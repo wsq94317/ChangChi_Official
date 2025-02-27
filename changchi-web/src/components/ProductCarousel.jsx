@@ -5,10 +5,23 @@ function ProductCarousel() {
   const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:5192/api/products')
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((err) => console.error('Fetch error:', err));
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products`)
+      .then((res) => {
+        if (!res.ok) {
+          console.error('Response not OK:', res.status, res.statusText);
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.text(); // 先获取原始文本
+      })
+      .then((text) => {
+        console.log('Raw response:', text); // 调试输出
+        const data = JSON.parse(text);
+        setProducts(data.$values || data || []);
+      })
+      .catch((err) => {
+        console.error('Fetch products failed:', err);
+        setProducts([]);
+      });
   }, []);
 
   const itemsPerPage = 3;

@@ -9,19 +9,16 @@ function Navbar() {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/categories`)
       .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
-        if (data.length === 0) {
-          console.warn('No categories from API, using defaults');
-          setCategories([
-            { id: 1, name_EN: 'Tofu', name_ZH_CN: '豆腐类' },
-            { id: 2, name_EN: 'Japanese Tofu', name_ZH_CN: '日本豆腐类' },
-          ]);
-        } else {
-          setCategories(data);
+        if (!res.ok) {
+          console.error('Response not OK:', res.status, res.statusText);
+          throw new Error(`HTTP error! Status: ${res.status}`);
         }
+        return res.text(); // 先获取原始文本
+      })
+      .then((text) => {
+        console.log('Raw response:', text); // 调试输出
+        const data = JSON.parse(text);
+        setCategories(data.$values || data); // 处理 $values 结构
       })
       .catch((err) => {
         console.error('Fetch categories failed:', err);
