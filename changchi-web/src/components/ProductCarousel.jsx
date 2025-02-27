@@ -5,21 +5,23 @@ function ProductCarousel() {
   const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products`)
+    fetch('/api/products')
       .then((res) => {
         if (!res.ok) {
-          console.error('Response not OK:', res.status, res.statusText);
-          throw new Error(`HTTP error! Status: ${res.status}`);
+          return res.text().then(text => {
+            console.error('Response not OK:', res.status, res.statusText, 'Body:', text);
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          });
         }
-        return res.text(); // 先获取原始文本
+        return res.json();
       })
-      .then((text) => {
-        console.log('Raw response:', text); // 调试输出
-        const data = JSON.parse(text);
-        setProducts(data.$values || data || []);
+      .then((data) => {
+        console.log('Products fetched:', data);
+        const productList = data.$values || data || [];
+        setProducts(productList.length > 0 ? productList : []);
       })
       .catch((err) => {
-        console.error('Fetch products failed:', err);
+        console.error('Fetch products failed:', err.message);
         setProducts([]);
       });
   }, []);
@@ -39,18 +41,22 @@ function ProductCarousel() {
           ←
         </button>
         <div className="flex flex-wrap justify-center gap-6 w-full max-w-5xl">
-          {products
-            .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
-            .map((product) => (
-              <div key={product.id} className="w-1/3 bg-white rounded-lg shadow-lg p-4">
-                <img
-                  src={product.images.find((i) => i.isPrimary)?.imageUrl || 'https://via.placeholder.com/300'}
-                  alt={product.name_EN}
-                  className="w-full h-48 object-cover rounded-t-lg"
-                />
-                <p className="text-center mt-2 font-semibold">{product.name_EN}</p>
-              </div>
-            ))}
+          {products.length > 0 ? (
+            products
+              .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+              .map((product) => (
+                <div key={product.id} className="w-1/3 bg-white rounded-lg shadow-lg p-4">
+                  <img
+                    src={Array.isArray(product.images) && product.images.find((i) => i.isPrimary)?.imageUrl || '/logo.png'} // 使用本地占位图
+                    alt={product.name_EN}
+                    className="w-full h-48 object-cover rounded-t-lg"
+                  />
+                  <p className="text-center mt-2 font-semibold">{product.name_EN}</p>
+                </div>
+              ))
+          ) : (
+            <p className="text-center">No products available</p>
+          )}
         </div>
         <button
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}

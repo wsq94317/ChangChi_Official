@@ -7,21 +7,26 @@ function Navbar() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/categories`)
+    fetch('/api/categories')
       .then((res) => {
         if (!res.ok) {
-          console.error('Response not OK:', res.status, res.statusText);
-          throw new Error(`HTTP error! Status: ${res.status}`);
+          return res.text().then(text => {
+            console.error('Response not OK:', res.status, res.statusText, 'Body:', text);
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          });
         }
-        return res.text(); // 先获取原始文本
+        return res.json();
       })
-      .then((text) => {
-        console.log('Raw response:', text); // 调试输出
-        const data = JSON.parse(text);
-        setCategories(data.$values || data); // 处理 $values 结构
+      .then((data) => {
+        console.log('Categories fetched:', data);
+        const categoryList = data.$values || data || [];
+        setCategories(categoryList.length > 0 ? categoryList : [
+          { id: 1, name_EN: 'Tofu', name_ZH_CN: '豆腐类' },
+          { id: 2, name_EN: 'Japanese Tofu', name_ZH_CN: '日本豆腐类' },
+        ]);
       })
       .catch((err) => {
-        console.error('Fetch categories failed:', err);
+        console.error('Fetch categories failed:', err.message);
         setCategories([
           { id: 1, name_EN: 'Tofu', name_ZH_CN: '豆腐类' },
           { id: 2, name_EN: 'Japanese Tofu', name_ZH_CN: '日本豆腐类' },
@@ -60,19 +65,21 @@ function Navbar() {
               {t('products')}
             </button>
             {isProductOpen && (
-              <div className="absolute bg-yellow-600 p-2 rounded-b-lg flex space-x-4">
+              <div className="absolute left-0 w-full bg-yellow-600 p-4 rounded-b-lg flex justify-between">
                 {categories.map((cat) => (
                   <a
                     key={cat.id}
                     href={`#${cat.name_EN.toLowerCase()}`}
-                    className="flex flex-col items-center text-white hover:text-gray-200"
+                    className="flex flex-col items-center text-white hover:text-gray-200 w-1/8"
                   >
                     <img
                       src="/logo.png"
                       alt={`${cat.name_EN} icon`}
-                      className="w-6 h-6 mb-1"
+                      className="w-24 h-24 object-contain mb-2" // 放大图片，等比例缩放
                     />
-                    {getCategoryName(cat)}
+                    <div className="bg-gray-800 w-full text-center py-2">
+                      {getCategoryName(cat)}
+                    </div>
                   </a>
                 ))}
               </div>

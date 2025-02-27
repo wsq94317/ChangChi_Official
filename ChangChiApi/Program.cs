@@ -9,7 +9,6 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve; // 处理循环引用
-        options.JsonSerializerOptions.MaxDepth = 64; // 可选：增加深度
     });
 
 // 注册数据库上下文
