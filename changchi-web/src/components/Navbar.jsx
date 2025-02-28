@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import CategoryItem from './CategoryItem';
 
@@ -6,6 +6,20 @@ function Navbar() {
   const { t, i18n } = useTranslation();
   const [isProductOpen, setIsProductOpen] = useState(false);
   const [categories, setCategories] = useState([]);
+  const timeoutRef = useRef(null);
+
+  const showMenu = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current); 
+    }
+    setIsProductOpen(true);
+  }
+
+  const hideMenu = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsProductOpen(false);
+    }, 300);
+  }
 
   useEffect(() => {
     fetch('/api/categories')
@@ -38,16 +52,18 @@ function Navbar() {
         <div className="flex space-x-6 items-center">
           <div
             className="relative"
-            onMouseEnter={() => setIsProductOpen(true)}
-            onMouseLeave={() => setIsProductOpen(false)}
+            onMouseEnter={showMenu}
+            onMouseLeave={hideMenu}
           >
-            <button className="px-3 py-1 rounded hover:bg-gray-800">
+            <button className="px-3 py-1 rounded hover:bg-yellow-600 bg-transparent">
               {t('products')}
             </button>
             {isProductOpen && (
               <div
-                className="absolute left-1/2 transform -translate-x-1/2 bg-yellow-600 p-4 rounded-b-lg flex"
-                style={{ width: 'max-content' }}
+                className="absolute left-1/2 transform -translate-x-1/2 bg-yellow-600 p-4 rounded-b-lg flex mt-0"
+                style={{ width: 'max-content', top: '61px' }}
+                onMouseEnter={showMenu}
+                onMouseLeave={hideMenu}
               >
                 {categories.map((cat) => (
                   <CategoryItem key={cat.id} category={cat} language={i18n.language} />

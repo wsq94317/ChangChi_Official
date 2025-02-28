@@ -16,7 +16,7 @@ function Banner() {
   }, [banners.length]);
 
   return (
-    <div className="w-full h-[600px] overflow-hidden">
+    <div className="w-full h-[600px] overflow-hidden mt-16">
       <img
         src={banners[current]}
         alt={`Banner ${current + 1}`}

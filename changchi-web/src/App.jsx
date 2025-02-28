@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
-      <div className="pt-20 max-w-screen-xl mx-auto"> 
+      <div className="pt-20 max-w-screen-xl mx-auto px-4"> 
         <Banner />
         <ProductCarousel />
         <ContactUs />
