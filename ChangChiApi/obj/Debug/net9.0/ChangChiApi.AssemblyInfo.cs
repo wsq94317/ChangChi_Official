@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChangChiApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ad1125400d6c97ad7795e8dafc429ece71c2af6f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+096a22d4baa69695a7aa33ecd17554749eadce35")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChangChiApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChangChiApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

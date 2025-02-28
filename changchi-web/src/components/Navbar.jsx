@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import CategoryItem from './CategoryItem';
 
 function Navbar() {
   const { t, i18n } = useTranslation();
@@ -9,16 +10,10 @@ function Navbar() {
   useEffect(() => {
     fetch('/api/categories')
       .then((res) => {
-        if (!res.ok) {
-          return res.text().then(text => {
-            console.error('Response not OK:', res.status, res.statusText, 'Body:', text);
-            throw new Error(`HTTP error! Status: ${res.status}`);
-          });
-        }
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         return res.json();
       })
       .then((data) => {
-        console.log('Categories fetched:', data);
         const categoryList = data.$values || data || [];
         setCategories(categoryList.length > 0 ? categoryList : [
           { id: 1, name_EN: 'Tofu', name_ZH_CN: '豆腐类' },
@@ -34,26 +29,11 @@ function Navbar() {
       });
   }, []);
 
-  const getCategoryName = (category) => {
-    switch (i18n.language) {
-      case 'zh-CN': return category.name_ZH_CN || category.name_EN;
-      case 'zh-TW': return category.name_ZH_TW || category.name_EN;
-      case 'vn': return category.name_VN || category.name_EN;
-      case 'ko': return category.name_KO || category.name_EN;
-      case 'ja': return category.name_JA || category.name_EN;
-      default: return category.name_EN;
-    }
-  };
-
   return (
     <nav className="fixed top-0 w-full bg-yellow-500 text-white p-4 shadow-lg z-10">
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="max-w-screen-xl mx-auto flex justify-between items-center">
         <a href="/" className="flex items-center">
-          <img
-            src="/logo.png"
-            alt="Changchi Logo"
-            className="h-10 w-auto m-2"
-          />
+          <img src="/logo.png" alt="Changchi Logo" className="h-10 w-auto m-2" />
         </a>
         <div className="flex space-x-6 items-center">
           <div
@@ -65,22 +45,12 @@ function Navbar() {
               {t('products')}
             </button>
             {isProductOpen && (
-              <div className="absolute left-0 w-full bg-yellow-600 p-4 rounded-b-lg flex justify-between">
+              <div
+                className="absolute left-1/2 transform -translate-x-1/2 bg-yellow-600 p-4 rounded-b-lg flex"
+                style={{ width: 'max-content' }}
+              >
                 {categories.map((cat) => (
-                  <a
-                    key={cat.id}
-                    href={`#${cat.name_EN.toLowerCase()}`}
-                    className="flex flex-col items-center text-white hover:text-gray-200 w-1/8"
-                  >
-                    <img
-                      src="/logo.png"
-                      alt={`${cat.name_EN} icon`}
-                      className="w-24 h-24 object-contain mb-2" // 放大图片，等比例缩放
-                    />
-                    <div className="bg-gray-800 w-full text-center py-2">
-                      {getCategoryName(cat)}
-                    </div>
-                  </a>
+                  <CategoryItem key={cat.id} category={cat} language={i18n.language} />
                 ))}
               </div>
             )}
